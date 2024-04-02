@@ -23,7 +23,7 @@ class HomeView extends GetView<HomeController> {
         children: [
           Obx(
             () => Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: PrettyQrView.data(
                 data: controller.qrcodeData.value,
                 errorCorrectLevel: QrErrorCorrectLevel.L,
@@ -40,7 +40,7 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Flex(
               direction: Axis.vertical,
               children: [
