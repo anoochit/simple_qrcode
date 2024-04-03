@@ -4,8 +4,12 @@ A QR Code generator
 
 Feature
 
-- Generate QRCode
-- QRCode style
+- [x] Generate QRCode
+- [x] QRCode style
+- [x] Save image to gallery
+- [ ] Change foreground and background color
+- [ ] Add center image
+- [ ] More QRCode types
 
 Screenshots
 

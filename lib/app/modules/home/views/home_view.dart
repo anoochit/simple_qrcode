@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 import '../controllers/home_controller.dart';
@@ -80,6 +83,14 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FilledButton.icon(
+              onPressed: () => saveQRCode(context),
+              icon: const Icon(Icons.download),
+              label: const Text('Save'),
+            ),
+          )
         ],
       ),
     );
@@ -98,5 +109,45 @@ class HomeView extends GetView<HomeController> {
 
   setQrCodeStyle(bool value) {
     controller.qrcodeStyle.value = value;
+  }
+
+  saveQRCode(BuildContext context) async {
+    final qrCode = QrCode.fromData(
+      data: controller.qrcodeData.value,
+      errorCorrectLevel: QrErrorCorrectLevel.L,
+    );
+
+    final qrImage = QrImage(qrCode);
+    final qrImageBytes = await qrImage.toImageAsBytes(
+      format: ImageByteFormat.png,
+      size: 1024,
+      decoration: (controller.qrcodeStyle.value)
+          ? const PrettyQrDecoration(
+              background: Colors.white,
+            )
+          : PrettyQrDecoration(
+              background: Colors.white,
+              shape: (controller.qrcodeRounded.value)
+                  ? const PrettyQrRoundedSymbol()
+                  : const PrettyQrRoundedSymbol(
+                      borderRadius: BorderRadius.zero,
+                    ),
+            ),
+    );
+
+    final buffer = qrImageBytes!.buffer;
+
+    await ImageGallerySaver.saveImage(
+      buffer.asUint8List(
+        qrImageBytes.offsetInBytes,
+        qrImageBytes.lengthInBytes,
+      ),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Save image to gallery'),
+      ),
+    );
   }
 }
