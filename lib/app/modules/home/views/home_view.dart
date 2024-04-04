@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
@@ -21,77 +22,134 @@ class HomeView extends GetView<HomeController> {
       appBar: AppBar(
         title: const Text('QRCode Generator'),
         centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        surfaceTintColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: ListView(
+      body: OrientationBuilder(
+        builder: (context, orientation) {
+          if (orientation == Orientation.portrait) {
+            return buildPortraitView(context);
+          } else {
+            return buildLandscapeView(context);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget buildLandscapeView(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        buildQRCodeView(),
+        const VerticalDivider(),
+        Expanded(
+          child: ListView(
+            children: [
+              buildQRCodeData(context),
+              buildSaveButton(context),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  ListView buildPortraitView(BuildContext context) {
+    return ListView(
+      children: [
+        buildQRCodeView(),
+        const Divider(),
+        buildQRCodeData(context),
+        buildSaveButton(context)
+      ],
+    );
+  }
+
+  Padding buildSaveButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: FilledButton.icon(
+        onPressed: () => saveQRCode(context),
+        icon: const Icon(Icons.download),
+        label: const Text('Save'),
+      ),
+    );
+  }
+
+  Padding buildQRCodeData(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Flex(
+        direction: Axis.vertical,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Obx(
-            () => Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: PrettyQrView.data(
-                data: controller.qrcodeData.value,
-                errorCorrectLevel: QrErrorCorrectLevel.L,
-                decoration: (controller.qrcodeStyle.value)
-                    ? const PrettyQrDecoration()
-                    : PrettyQrDecoration(
-                        shape: (controller.qrcodeRounded.value)
-                            ? const PrettyQrRoundedSymbol()
-                            : const PrettyQrRoundedSymbol(
-                                borderRadius: BorderRadius.zero,
-                              ),
-                      ),
+          Text(
+            'Barcode data',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const Gap(8.0),
+          TextFormField(
+            controller: qrcodeTextController,
+            decoration: const InputDecoration(
+              hintText: 'Type your QRCode data...',
+              prefixIcon: Icon(Icons.text_fields),
+            ),
+            keyboardType: TextInputType.text,
+            onFieldSubmitted: (value) => setQRCodeData(value),
+          ),
+          const Gap(12.0),
+          Text(
+            'Barcode style',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const Gap(8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Smooth'),
+              Obx(
+                () => Switch.adaptive(
+                  value: controller.qrcodeStyle.value,
+                  onChanged: (value) => setQrCodeStyle(value),
+                ),
               ),
-            ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Flex(
-              direction: Axis.vertical,
-              children: [
-                TextFormField(
-                  controller: qrcodeTextController,
-                  decoration: const InputDecoration(
-                    hintText: 'Type your QRCode data...',
-                    prefixIcon: Icon(Icons.text_fields),
-                  ),
-                  keyboardType: TextInputType.text,
-                  onFieldSubmitted: (value) => setQRCodeData(value),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Rounded cornors'),
+              Obx(
+                () => Switch.adaptive(
+                  value: controller.qrcodeRounded.value,
+                  onChanged: (value) => setQrCodeShap(value),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Smooth'),
-                    Obx(
-                      () => Switch.adaptive(
-                        value: controller.qrcodeStyle.value,
-                        onChanged: (value) => setQrCodeStyle(value),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Rounded cornors'),
-                    Obx(
-                      () => Switch.adaptive(
-                        value: controller.qrcodeRounded.value,
-                        onChanged: (value) => setQrCodeShap(value),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FilledButton.icon(
-              onPressed: () => saveQRCode(context),
-              icon: const Icon(Icons.download),
-              label: const Text('Save'),
-            ),
-          )
         ],
+      ),
+    );
+  }
+
+  Obx buildQRCodeView() {
+    return Obx(
+      () => Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: PrettyQrView.data(
+          data: controller.qrcodeData.value,
+          errorCorrectLevel: QrErrorCorrectLevel.L,
+          decoration: (controller.qrcodeStyle.value)
+              ? const PrettyQrDecoration()
+              : PrettyQrDecoration(
+                  shape: (controller.qrcodeRounded.value)
+                      ? const PrettyQrRoundedSymbol()
+                      : const PrettyQrRoundedSymbol(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                ),
+        ),
       ),
     );
   }
