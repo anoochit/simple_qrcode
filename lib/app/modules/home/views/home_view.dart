@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         buildQRCodeView(),
-        const VerticalDivider(),
+        const VerticalDivider(width: 1.0),
         Expanded(
           child: ListView(
             children: [
@@ -59,7 +59,7 @@ class HomeView extends GetView<HomeController> {
     return ListView(
       children: [
         buildQRCodeView(),
-        const Divider(),
+        const Divider(height: 1.0),
         buildQRCodeData(context),
         buildSaveButton(context)
       ],
@@ -79,13 +79,13 @@ class HomeView extends GetView<HomeController> {
 
   Padding buildQRCodeData(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
       child: Flex(
         direction: Axis.vertical,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Barcode data',
+            'Barcode data & style',
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const Gap(8.0),
@@ -98,12 +98,7 @@ class HomeView extends GetView<HomeController> {
             keyboardType: TextInputType.text,
             onFieldSubmitted: (value) => setQRCodeData(value),
           ),
-          const Gap(12.0),
-          Text(
-            'Barcode style',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const Gap(8.0),
+          const Gap(16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
