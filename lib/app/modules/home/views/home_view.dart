@@ -132,23 +132,26 @@ class HomeView extends GetView<HomeController> {
 
   Obx buildQRCodeView() {
     return Obx(
-      () => Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: PrettyQrView.data(
-          data: controller.qrcodeData.value,
-          errorCorrectLevel: QrErrorCorrectLevel.L,
-          decoration: (controller.qrcodeStyle.value)
-              ? PrettyQrDecoration(
-                  background: Colors.white,
-                )
-              : PrettyQrDecoration(
-                  background: Colors.white,
-                  shape: (controller.qrcodeRounded.value)
-                      ? const PrettyQrRoundedSymbol()
-                      : const PrettyQrRoundedSymbol(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                ),
+      () => Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: PrettyQrView.data(
+            data: controller.qrcodeData.value,
+            errorCorrectLevel: QrErrorCorrectLevel.L,
+            decoration: (controller.qrcodeStyle.value)
+                ? PrettyQrDecoration(
+                    background: Colors.white,
+                  )
+                : PrettyQrDecoration(
+                    background: Colors.white,
+                    shape: (controller.qrcodeRounded.value)
+                        ? const PrettyQrRoundedSymbol()
+                        : const PrettyQrRoundedSymbol(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                  ),
+          ),
         ),
       ),
     );
