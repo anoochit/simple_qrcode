@@ -1,3 +1,5 @@
+// ignore_for_file: non_const_call_to_literal_constructor, use_build_context_synchronously
+
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -136,8 +138,11 @@ class HomeView extends GetView<HomeController> {
           data: controller.qrcodeData.value,
           errorCorrectLevel: QrErrorCorrectLevel.L,
           decoration: (controller.qrcodeStyle.value)
-              ? const PrettyQrDecoration()
+              ? PrettyQrDecoration(
+                  background: Colors.white,
+                )
               : PrettyQrDecoration(
+                  background: Colors.white,
                   shape: (controller.qrcodeRounded.value)
                       ? const PrettyQrRoundedSymbol()
                       : const PrettyQrRoundedSymbol(
