@@ -20,55 +20,64 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     qrcodeTextController.text = controller.qrcodeData.value;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('QRCode Generator'),
-        centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        surfaceTintColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: OrientationBuilder(
-        builder: (context, orientation) {
-          if (orientation == Orientation.portrait) {
-            return buildPortraitView(context);
-          } else {
-            return buildLandscapeView(context);
-          }
-        },
-      ),
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (orientation == Orientation.portrait) {
+          return buildPortraitView(context);
+        }
+
+        return buildLandscapeView(context);
+      },
     );
   }
 
   Widget buildLandscapeView(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        buildQRCodeView(),
-        const VerticalDivider(width: 1.0),
-        Expanded(
-          child: ListView(
-            children: [
-              buildQRCodeData(context),
-              buildSaveButton(context),
-            ],
-          ),
-        )
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('QRCode Generator'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: SingleChildScrollView(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            buildQRCodeView(context),
+            const VerticalDivider(width: 1.0),
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  buildQRCodeData(context),
+                  buildSaveButton(context),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
-  ListView buildPortraitView(BuildContext context) {
-    return ListView(
-      children: [
-        buildQRCodeView(),
-        const Divider(height: 1.0),
-        buildQRCodeData(context),
-        buildSaveButton(context)
-      ],
+  Widget buildPortraitView(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('QRCode Generator'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: ListView(
+        children: [
+          Gap(8.0),
+          buildQRCodeView(context),
+          Gap(8.0),
+          const Divider(),
+          buildQRCodeData(context),
+          buildSaveButton(context)
+        ],
+      ),
     );
   }
 
-  Padding buildSaveButton(BuildContext context) {
+  Widget buildSaveButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FilledButton.icon(
@@ -79,11 +88,10 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Padding buildQRCodeData(BuildContext context) {
+  Widget buildQRCodeData(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      child: Flex(
-        direction: Axis.vertical,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -130,11 +138,14 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Obx buildQRCodeView() {
+  Widget buildQRCodeView(BuildContext context) {
     return Obx(
       () => Container(
-        color: Colors.white,
-        child: Padding(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width * 0.5,
+        height: MediaQuery.of(context).size.width * 0.5,
+        child: Container(
+          color: Colors.white,
           padding: const EdgeInsets.all(24.0),
           child: PrettyQrView.data(
             data: controller.qrcodeData.value,
