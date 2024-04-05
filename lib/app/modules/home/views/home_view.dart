@@ -37,23 +37,21 @@ class HomeView extends GetView<HomeController> {
         title: const Text('QRCode Generator'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: SingleChildScrollView(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildQRCodeView(context),
-            const VerticalDivider(width: 1.0),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  buildQRCodeData(context),
-                  buildSaveButton(context),
-                ],
-              ),
-            )
-          ],
-        ),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          buildQRCodeView(context, true),
+          const VerticalDivider(width: 1.0),
+          Expanded(
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                buildQRCodeData(context),
+                buildSaveButton(context),
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
@@ -67,7 +65,7 @@ class HomeView extends GetView<HomeController> {
       body: ListView(
         children: [
           const Gap(8.0),
-          buildQRCodeView(context),
+          buildQRCodeView(context, false),
           const Gap(8.0),
           const Divider(),
           buildQRCodeData(context),
@@ -138,7 +136,15 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget buildQRCodeView(BuildContext context) {
+  Widget buildQRCodeView(BuildContext context, bool isLandscape) {
+    double width = MediaQuery.of(context).size.width * 0.8;
+    double height = MediaQuery.of(context).size.width * 0.8;
+
+    if (isLandscape == true) {
+      width = MediaQuery.of(context).size.height;
+      height = MediaQuery.of(context).size.height;
+    }
+
     return Obx(
       () => Container(
         alignment: Alignment.center,
