@@ -66,9 +66,9 @@ class HomeView extends GetView<HomeController> {
       ),
       body: ListView(
         children: [
-          Gap(8.0),
+          const Gap(8.0),
           buildQRCodeView(context),
-          Gap(8.0),
+          const Gap(8.0),
           const Divider(),
           buildQRCodeData(context),
           buildSaveButton(context)
@@ -146,7 +146,7 @@ class HomeView extends GetView<HomeController> {
         height: MediaQuery.of(context).size.width * 0.5,
         child: Container(
           color: Colors.white,
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(8.0),
           child: PrettyQrView.data(
             data: controller.qrcodeData.value,
             errorCorrectLevel: QrErrorCorrectLevel.L,
@@ -158,7 +158,7 @@ class HomeView extends GetView<HomeController> {
                     background: Colors.white,
                     shape: (controller.qrcodeRounded.value)
                         ? const PrettyQrRoundedSymbol()
-                        : const PrettyQrRoundedSymbol(
+                        : PrettyQrRoundedSymbol(
                             borderRadius: BorderRadius.zero,
                           ),
                   ),
@@ -192,7 +192,7 @@ class HomeView extends GetView<HomeController> {
     final qrImage = QrImage(qrCode);
     final qrImageBytes = await qrImage.toImageAsBytes(
       format: ImageByteFormat.png,
-      size: 1024,
+      size: 512,
       decoration: (controller.qrcodeStyle.value)
           ? const PrettyQrDecoration(
               background: Colors.white,
@@ -201,9 +201,7 @@ class HomeView extends GetView<HomeController> {
               background: Colors.white,
               shape: (controller.qrcodeRounded.value)
                   ? const PrettyQrRoundedSymbol()
-                  : const PrettyQrRoundedSymbol(
-                      borderRadius: BorderRadius.zero,
-                    ),
+                  : PrettyQrRoundedSymbol(),
             ),
     );
 
