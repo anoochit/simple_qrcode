@@ -7,9 +7,9 @@ Feature
 - [x] Generate QRCode
 - [x] QRCode style
 - [x] Save image to gallery
-- [ ] Change foreground and background color
+- [x] Change foreground and background color
 - [ ] Add center image
-- [ ] More QRCode types
+- [ ] More QRCode types eg: url, contact etc.
 
 Screenshots
 

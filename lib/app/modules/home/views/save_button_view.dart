@@ -32,17 +32,8 @@ class SaveButtonView extends GetView<HomeController> {
     final qrImage = QrImage(qrCode);
     final qrImageBytes = await qrImage.toImageAsBytes(
       format: ImageByteFormat.png,
-      size: 512,
-      decoration: (controller.qrcodeStyle.value)
-          ? const PrettyQrDecoration(
-              background: Colors.white,
-            )
-          : PrettyQrDecoration(
-              background: Colors.white,
-              shape: (controller.qrcodeRounded.value)
-                  ? const PrettyQrRoundedSymbol()
-                  : PrettyQrRoundedSymbol(),
-            ),
+      size: 1024,
+      decoration: controller.prettyQrDecoration.value,
     );
 
     final buffer = qrImageBytes!.buffer;

@@ -15,8 +15,8 @@ class QRCodeView extends GetView<HomeController> {
     double height = MediaQuery.of(context).size.width * 0.5;
 
     if (isLandscape == true) {
-      width = MediaQuery.of(context).size.height * 0.6;
-      height = MediaQuery.of(context).size.height * 0.6;
+      width = MediaQuery.of(context).size.height * 0.8;
+      height = MediaQuery.of(context).size.height * 0.8;
     }
 
     return Obx(
@@ -26,22 +26,11 @@ class QRCodeView extends GetView<HomeController> {
         height: height,
         child: Container(
           color: Colors.white,
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: PrettyQrView.data(
             data: controller.qrcodeData.value,
             errorCorrectLevel: QrErrorCorrectLevel.L,
-            decoration: (controller.qrcodeStyle.value)
-                ? PrettyQrDecoration(
-                    background: Colors.white,
-                  )
-                : PrettyQrDecoration(
-                    background: Colors.white,
-                    shape: (controller.qrcodeRounded.value)
-                        ? const PrettyQrRoundedSymbol()
-                        : PrettyQrRoundedSymbol(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                  ),
+            decoration: controller.prettyQrDecoration.value,
           ),
         ),
       ),

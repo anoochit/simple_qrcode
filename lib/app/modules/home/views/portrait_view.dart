@@ -21,7 +21,7 @@ class PortraitView extends GetView<HomeController> {
         children: const [
           Gap(8.0),
           QRCodeView(isLandscape: false),
-          Gap(8.0),
+          Gap(4.0),
           Divider(),
           QRCodeDataView(),
           SaveButtonView()

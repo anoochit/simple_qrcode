@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 
 import '../controllers/home_controller.dart';
+import 'select_color_view.dart';
 
 class QRCodeDataView extends GetView<HomeController> {
   const QRCodeDataView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -15,10 +19,10 @@ class QRCodeDataView extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Barcode data & style',
+            'Barcode Data & Style',
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          const Gap(8.0),
+          const Gap(4.0),
           TextFormField(
             controller: controller.qrcodeTextController,
             decoration: const InputDecoration(
@@ -27,16 +31,53 @@ class QRCodeDataView extends GetView<HomeController> {
             ),
             keyboardType: TextInputType.text,
             onFieldSubmitted: (value) => setQRCodeData(value),
+            onChanged: (value) => setQRCodeData(value),
           ),
-          const Gap(16.0),
+          const Gap(8.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Smooth'),
+              Text(
+                'Style',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               Obx(
-                () => Switch.adaptive(
-                  value: controller.qrcodeStyle.value,
-                  onChanged: (value) => setQrCodeStyle(value),
+                () => DropdownButton<String>(
+                  value: controller.qrcodeStyleValue.value,
+                  items: controller.qrcodeStyle
+                      .map((e) => DropdownMenuItem<String>(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setQrCodeStyle(
+                      style: value!,
+                      foreground: controller.foregroundColor.value,
+                      background: controller.backgroundColor.value,
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Foreground color',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Obx(
+                () => SelectedColorView(
+                  color: controller.foregroundColor.value,
+                  onChanged: (color) {
+                    setQrCodeStyle(
+                      style: controller.qrcodeStyleValue.value,
+                      foreground: color,
+                      background: controller.backgroundColor.value,
+                    );
+                  },
                 ),
               ),
             ],
@@ -44,15 +85,24 @@ class QRCodeDataView extends GetView<HomeController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Rounded cornors'),
+              Text(
+                'Background color',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               Obx(
-                () => Switch.adaptive(
-                  value: controller.qrcodeRounded.value,
-                  onChanged: (value) => setQrCodeShap(value),
+                () => SelectedColorView(
+                  color: controller.backgroundColor.value,
+                  onChanged: (color) {
+                    setQrCodeStyle(
+                      style: controller.qrcodeStyleValue.value,
+                      foreground: controller.foregroundColor.value,
+                      background: color,
+                    );
+                  },
                 ),
               ),
             ],
-          ),
+          )
         ],
       ),
     );
@@ -62,14 +112,40 @@ class QRCodeDataView extends GetView<HomeController> {
     controller.qrcodeData.value = value;
   }
 
-  setQrCodeShap(bool value) {
-    controller.qrcodeRounded.value = value;
-    if (value) {
-      controller.qrcodeStyle.value = false;
+  setQrCodeStyle(
+      {required String style,
+      required Color foreground,
+      required Color background}) {
+    controller.qrcodeStyleValue.value = style;
+    controller.backgroundColor.value = background;
+    controller.foregroundColor.value = foreground;
+    switch (style) {
+      case 'normal':
+        controller.prettyQrDecoration.value = PrettyQrDecoration(
+          background: controller.backgroundColor.value,
+          shape: PrettyQrSmoothSymbol(
+            roundFactor: 0.0,
+            color: controller.foregroundColor.value,
+          ),
+        );
+        break;
+      case 'smooth':
+        controller.prettyQrDecoration.value = PrettyQrDecoration(
+          background: controller.backgroundColor.value,
+          shape: PrettyQrSmoothSymbol(
+            color: controller.foregroundColor.value,
+          ),
+        );
+        break;
+      case 'dotted':
+        controller.prettyQrDecoration.value = PrettyQrDecoration(
+          background: controller.backgroundColor.value,
+          shape: PrettyQrRoundedSymbol(
+            color: controller.foregroundColor.value,
+          ),
+        );
+        break;
+      default:
     }
-  }
-
-  setQrCodeStyle(bool value) {
-    controller.qrcodeStyle.value = value;
   }
 }
