@@ -1,3 +1,5 @@
+// ignore_for_file: non_const_call_to_literal_constructor
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
@@ -13,7 +15,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     prettyQrDecoration.value = PrettyQrDecoration(
       background: backgroundColor.value,

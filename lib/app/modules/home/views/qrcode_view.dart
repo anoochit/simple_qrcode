@@ -26,7 +26,7 @@ class QRCodeView extends GetView<HomeController> {
         height: height,
         child: Container(
           color: Colors.white,
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: PrettyQrView.data(
             data: controller.qrcodeData.value,
             errorCorrectLevel: QrErrorCorrectLevel.L,
