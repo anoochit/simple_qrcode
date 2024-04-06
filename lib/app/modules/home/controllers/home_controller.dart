@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -6,4 +7,6 @@ class HomeController extends GetxController {
   RxBool qrcodeRounded = false.obs;
 
   RxBool qrcodeStyle = true.obs;
+
+  TextEditingController qrcodeTextController = TextEditingController();
 }
