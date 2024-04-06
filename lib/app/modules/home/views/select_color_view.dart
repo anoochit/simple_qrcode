@@ -55,25 +55,28 @@ class SelectedColorView extends GetView {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Wrap(
-          children: colors
-              .map((e) => Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: ClipOval(
-                      child: InkWell(
-                        onTap: () {
-                          onChanged(e);
-                          Get.back();
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          color: e,
+        content: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: Wrap(
+            children: colors
+                .map((e) => Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ClipOval(
+                        child: InkWell(
+                          onTap: () {
+                            onChanged(e);
+                            Get.back();
+                          },
+                          child: Container(
+                            width: 44,
+                            height: 44,
+                            color: e,
+                          ),
                         ),
                       ),
-                    ),
-                  ))
-              .toList(),
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );

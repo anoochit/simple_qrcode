@@ -14,7 +14,7 @@ class SaveButtonView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: FilledButton.icon(
         onPressed: () => saveQRCode(context),
         icon: const Icon(Icons.download),
