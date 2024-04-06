@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:simply_qrcode/app/modules/home/controllers/home_controller.dart';
 
-class SelectedColorView extends GetView<HomeController> {
+class SelectedColorView extends GetView {
   SelectedColorView({super.key, required this.onChanged, required this.color});
 
   final ValueChanged onChanged;
