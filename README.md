@@ -2,7 +2,7 @@
 
 A QR Code generator
 
-Feature
+Todo Features
 
 - [x] Generate QRCode
 - [x] QRCode style
@@ -10,6 +10,7 @@ Feature
 - [x] Change foreground and background color
 - [ ] Add center image
 - [ ] More QRCode types eg: url, contact etc.
+- [ ] QRCode decorations eg: scan me badge.
 
 Screenshots
 
