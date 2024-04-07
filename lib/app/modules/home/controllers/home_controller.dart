@@ -12,6 +12,7 @@ class HomeController extends GetxController {
   Rx<Color> foregroundColor = Colors.black.obs;
   Rx<Color> backgroundColor = Colors.white.obs;
   Rx<PrettyQrDecoration> prettyQrDecoration = PrettyQrDecoration().obs;
+  Rx<String> imagePath = ''.obs;
 
   @override
   void onInit() {

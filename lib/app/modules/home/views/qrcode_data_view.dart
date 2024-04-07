@@ -1,9 +1,14 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pretty_qr_code/pretty_qr_code.dart';
+import 'package:simply_qrcode/app/modules/home/views/select_image_view.dart';
 
 import '../controllers/home_controller.dart';
 import 'select_color_view.dart';
@@ -55,6 +60,7 @@ class QRCodeDataView extends GetView<HomeController> {
                       style: value!,
                       foreground: controller.foregroundColor.value,
                       background: controller.backgroundColor.value,
+                      imagePath: controller.imagePath.value,
                     );
                   },
                 ),
@@ -76,6 +82,7 @@ class QRCodeDataView extends GetView<HomeController> {
                       style: controller.qrcodeStyleValue.value,
                       foreground: color,
                       background: controller.backgroundColor.value,
+                      imagePath: controller.imagePath.value,
                     );
                   },
                 ),
@@ -97,10 +104,33 @@ class QRCodeDataView extends GetView<HomeController> {
                       style: controller.qrcodeStyleValue.value,
                       foreground: controller.foregroundColor.value,
                       background: color,
+                      imagePath: controller.imagePath.value,
                     );
                   },
                 ),
               ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Logo',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Obx(
+                () => SelectImageView(
+                  image: controller.imagePath.value,
+                  onChanged: (xfile) {
+                    setQrCodeStyle(
+                      style: controller.qrcodeStyleValue.value,
+                      foreground: controller.foregroundColor.value,
+                      background: controller.backgroundColor.value,
+                      imagePath: xfile?.path ?? '',
+                    );
+                  },
+                ),
+              )
             ],
           )
         ],
@@ -112,16 +142,22 @@ class QRCodeDataView extends GetView<HomeController> {
     controller.qrcodeData.value = value;
   }
 
-  setQrCodeStyle(
-      {required String style,
-      required Color foreground,
-      required Color background}) {
+  setQrCodeStyle({
+    required String style,
+    required Color foreground,
+    required Color background,
+    required String imagePath,
+  }) {
     controller.qrcodeStyleValue.value = style;
     controller.backgroundColor.value = background;
     controller.foregroundColor.value = foreground;
+    controller.imagePath.value = imagePath;
     switch (style) {
       case 'normal':
         controller.prettyQrDecoration.value = PrettyQrDecoration(
+          image: (imagePath != '')
+              ? PrettyQrDecorationImage(image: FileImage(File(imagePath)))
+              : null,
           background: controller.backgroundColor.value,
           shape: PrettyQrSmoothSymbol(
             roundFactor: 0.0,
@@ -131,6 +167,9 @@ class QRCodeDataView extends GetView<HomeController> {
         break;
       case 'smooth':
         controller.prettyQrDecoration.value = PrettyQrDecoration(
+          image: (imagePath != '')
+              ? PrettyQrDecorationImage(image: FileImage(File(imagePath)))
+              : null,
           background: controller.backgroundColor.value,
           shape: PrettyQrSmoothSymbol(
             color: controller.foregroundColor.value,
@@ -139,6 +178,9 @@ class QRCodeDataView extends GetView<HomeController> {
         break;
       case 'dotted':
         controller.prettyQrDecoration.value = PrettyQrDecoration(
+          image: (imagePath != '')
+              ? PrettyQrDecorationImage(image: FileImage(File(imagePath)))
+              : null,
           background: controller.backgroundColor.value,
           shape: PrettyQrRoundedSymbol(
             color: controller.foregroundColor.value,
