@@ -8,7 +8,7 @@ Todo Features
 - [x] QRCode style
 - [x] Save image to gallery
 - [x] Change foreground and background color
-- [ ] Add center image
+- [x] Add center image
 - [ ] More QRCode types eg: url, contact etc.
 - [ ] QRCode decorations eg: scan me badge.
 
